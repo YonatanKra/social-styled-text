@@ -3,16 +3,15 @@
   "version": "0.1",
   "manifest_version": 3,
   "action": {
-    "default_icon": "assets/images/coffee_mug.png",
+    "default_icon": "assets/images/bold-option.png",
     "default_popup": "ui/popup.html"
   },
   "icons": {
-    "128": "assets/images/coffee_mug.png"
+    "128": "assets/images/bold-option.png"
   },
   "description": "This extension allows you to add bold text to facebook posts",
   "permissions": [
     "scripting",
-    "tabs",
     "activeTab"
   ]
 }
