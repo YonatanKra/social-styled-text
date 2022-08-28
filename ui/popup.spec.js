@@ -45,4 +45,16 @@ describe(`popup`, function () {
 
         expect(chrome.tabs.query).toHaveBeenCalledWith({active: true, currentWindow: true}, expect.any(Function));
     });
+
+    it('should replace the text of the button with bold text', async function () {
+        const textElement = document.createElement('div');
+        textElement.innerHTML = '<span>Bolderize</span>';
+        document.body.appendChild(textElement);
+
+        await import('./popup.js');
+        window.getSelection().selectAllChildren(textElement);
+        bolderizeButton.click();
+
+        expect(textElement.textContent).toEqual('𝐁𝐨𝐥𝐝𝐞𝐫𝐢𝐳𝐞');
+    });
 });
