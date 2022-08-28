@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
-    "test:dev": "npm run test -- --watch"
+    "test:dev": "NODE_OPTIONS=--experimental-vm-modules npx jest --watch"
   },
   "keywords": [
     "chrome-extension",
