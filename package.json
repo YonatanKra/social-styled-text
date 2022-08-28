@@ -4,7 +4,8 @@
   "description": "Allows for styling selected text in social networks",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test:dev": "npm run test -- --watch"
   },
   "keywords": [
     "chrome-extension",
