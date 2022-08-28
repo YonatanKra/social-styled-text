@@ -65,6 +65,6 @@ describe(`popup`, function () {
         bolderizeButton.click();
         const actualText = textElement.textContent.trim();
 
-        expect(actualText).toMatchSnapshot();
+        expect(actualText).toEqual('𝗕𝗼𝗹𝗱𝗲𝗿𝗶𝘇𝗲');
     });
 });
