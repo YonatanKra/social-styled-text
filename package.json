@@ -1,0 +1,15 @@
+{
+  "name": "social-styled-text",
+  "version": "1.0.0",
+  "description": "Allows for styling selected text in social networks",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "chrome-extension",
+    "facebook"
+  ],
+  "author": "Yonatan Kra (me@yonatankra.com)",
+  "license": "MIT"
+}
