@@ -47,6 +47,15 @@ describe(`popup`, function () {
     });
 
     it('should replace the text of the button with bold text', async function () {
+        jest.spyOn(chrome.tabs, 'query').mockImplementation((options, cb) => {
+            cb([{id: 1, title: 'test'}]);
+        });
+        chrome.scripting = {
+            executeScript: (options, cb) => {
+                const result = options.args ? options.func(...options.args) : options.func()
+                cb ? cb([{result}]) : null;
+            },
+        };
         const textElement = document.createElement('div');
         textElement.innerHTML = '<span>Bolderize</span>';
         document.body.appendChild(textElement);
@@ -54,7 +63,8 @@ describe(`popup`, function () {
         await import('./popup.js');
         window.getSelection().selectAllChildren(textElement);
         bolderizeButton.click();
+        const actualText = textElement.textContent.trim();
 
-        expect(textElement.textContent).toEqual('𝐁𝐨𝐥𝐝𝐞𝐫𝐢𝐳𝐞');
+        expect(actualText).toMatchSnapshot();
     });
 });
