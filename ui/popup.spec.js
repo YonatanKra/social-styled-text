@@ -16,13 +16,18 @@ function spyOnClickCallback(bolderizeButton) {
 }
 
 describe(`popup`, function () {
+    let bolderizeButton;
+
+    beforeEach(function () {
+        setButtonInPage();
+        bolderizeButton = document.querySelector('.bolderize');
+    });
+
     afterEach(function () {
         jest.restoreAllMocks();
     });
 
     it(`should set a listener on the bolderize button`, async function () {
-        setButtonInPage();
-        const bolderizeButton = document.querySelector('.bolderize');
         const spy = spyOnClickCallback(bolderizeButton);
         await import('./popup.js');
 
@@ -34,8 +39,6 @@ describe(`popup`, function () {
     it(`should work on current tab`, async function () {
         jest.spyOn(chrome.tabs, 'query');
 
-        setButtonInPage();
-        const bolderizeButton = document.querySelector('.bolderize');
         await import('./popup.js');
 
         bolderizeButton.click();
