@@ -1,4 +1,4 @@
-import {bolderizeWord} from "../utils/bolderizeWord.js";
+import {bolderizeOrUnbolderizeWord} from "../utils/bolderizeWord.js";
 
 function getSelectionText() {
     return window.getSelection().toString();
@@ -22,7 +22,7 @@ button.addEventListener('click', () => {
             target: {tabId},
             func: getSelectionText
         }, function(results) {
-            const boldValues = bolderizeWord(results[0].result);
+            const boldValues = bolderizeOrUnbolderizeWord(results[0].result);
             chrome.scripting.executeScript( {
                 target: {tabId},
                 func: modifySelection,
