@@ -15,6 +15,34 @@ function spyOnClickCallback(bolderizeButton) {
     return spy;
 }
 
+function prepChromeExtensionApi() {
+    jest.spyOn(chrome.tabs, 'query').mockImplementation((options, cb) => {
+        cb([{id: 1, title: 'test'}]);
+    });
+    chrome.scripting = {
+        executeScript: (options, cb) => {
+            const result = options.args ? options.func(...options.args) : options.func()
+            cb ? cb([{result}]) : null;
+        },
+    };
+}
+
+function createDOMWithText(text) {
+    const textElement = document.createElement('div');
+    textElement.innerHTML = `<span>${text}</span>`;
+    document.body.appendChild(textElement);
+
+    return textElement;
+}
+
+async function usePopupFlowToBolderizeElement(bolderizeButton, element) {
+    await import('./popup.js');
+    window.getSelection().selectAllChildren(element);
+    bolderizeButton.click();
+    const actualText = element.textContent.trim();
+    return actualText;
+}
+
 describe(`popup`, function () {
     let bolderizeButton;
 
@@ -47,23 +75,25 @@ describe(`popup`, function () {
     });
 
     it('should replace the text of the button with bold text', async function () {
-        jest.spyOn(chrome.tabs, 'query').mockImplementation((options, cb) => {
-            cb([{id: 1, title: 'test'}]);
-        });
-        chrome.scripting = {
-            executeScript: (options, cb) => {
-                const result = options.args ? options.func(...options.args) : options.func()
-                cb ? cb([{result}]) : null;
-            },
-        };
-        const textElement = document.createElement('div');
-        textElement.innerHTML = '<span>Bolderize</span>';
-        document.body.appendChild(textElement);
+        prepChromeExtensionApi();
+        const textElement = createDOMWithText('Bolderize');
+        const actualText = await usePopupFlowToBolderizeElement(bolderizeButton, textElement);
 
-        await import('./popup.js');
-        window.getSelection().selectAllChildren(textElement);
-        bolderizeButton.click();
-        const actualText = textElement.textContent.trim();
+        expect(actualText).toEqual('𝗕𝗼𝗹𝗱𝗲𝗿𝗶𝘇𝗲');
+    });
+
+    it('should replace bolderized text of the button with unbolderized text', async function () {
+        prepChromeExtensionApi();
+        const textElement = createDOMWithText('𝗕𝗼𝗹𝗱𝗲𝗿𝗶𝘇𝗲');
+        const actualText = await usePopupFlowToBolderizeElement(bolderizeButton, textElement);
+
+        expect(actualText).toEqual('Bolderize');
+    });
+
+    it('should replace partially bolderized text of the button with bolderized text', async function () {
+        prepChromeExtensionApi();
+        const textElement = createDOMWithText('B𝗼𝗹𝗱𝗲𝗿𝗶𝘇𝗲');
+        const actualText = await usePopupFlowToBolderizeElement(bolderizeButton, textElement);
 
         expect(actualText).toEqual('𝗕𝗼𝗹𝗱𝗲𝗿𝗶𝘇𝗲');
     });

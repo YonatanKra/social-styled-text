@@ -20,5 +20,8 @@
     "jest": "^29.0.1",
     "jest-environment-jsdom": "^29.0.1",
     "sinon-chrome": "^3.0.1"
+  },
+  "dependencies": {
+    "punycode": "^2.1.1"
   }
 }
